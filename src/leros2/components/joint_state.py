@@ -64,8 +64,8 @@ class JointConfig:
         ) / (self.range_max - self.range_min)
 
 
+@StateComponentConfig.register_subclass('joint_state')
 @dataclass
-@BaseComponentConfig.register_subclass('joint_state')
 class JointStateComponentConfig(StateComponentConfig):
     joints: list[JointConfig]
 

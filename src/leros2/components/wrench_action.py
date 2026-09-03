@@ -20,8 +20,8 @@ from leros2.components.common import ActionTopicComponent, ActionComponentConfig
 from leros2.components.common.base import BaseComponentConfig
 
 
+@ActionComponentConfig.register_subclass('wrench_action')
 @dataclass
-@BaseComponentConfig.register_subclass('wrench_action')
 class WrenchActionComponentConfig(ActionComponentConfig):
     name: str
     frame_id: str

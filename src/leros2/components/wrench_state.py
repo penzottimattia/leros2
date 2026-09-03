@@ -21,8 +21,8 @@ from dataclasses import dataclass
 from geometry_msgs.msg import WrenchStamped
 
 
+@StateComponentConfig.register_subclass('wrench_state')
 @dataclass
-@BaseComponentConfig.register_subclass('wrench_state')
 class WrenchStateComponentConfig(StateComponentConfig):
     name: str
 

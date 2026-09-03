@@ -20,8 +20,8 @@ from dataclasses import dataclass
 from leros2.components.common.base import BaseComponentConfig
 
 
+@ActionComponentConfig.register_subclass('joint_action')
 @dataclass(kw_only=True)
-@BaseComponentConfig.register_subclass('joint_action')
 class JointActionComponentConfig(ActionComponentConfig):
     joints: list[JointConfig]
 

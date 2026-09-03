@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from dataclasses import dataclass
+from draccus.choice_types import ChoiceRegistry
 from abc import abstractmethod
 from typing import Any, Generic, TypeVar
 from rclpy.action.client import ActionClient
@@ -22,7 +23,7 @@ from .base import BaseComponent, BaseComponentConfig
 
 
 @dataclass
-class ActionComponentConfig(BaseComponentConfig):
+class ActionComponentConfig(BaseComponentConfig, ChoiceRegistry):
     pass
 
 

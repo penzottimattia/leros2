@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from dataclasses import dataclass
+from draccus.choice_types import ChoiceRegistry
 
 import logging
 from abc import abstractmethod
@@ -28,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class StateComponentConfig(BaseComponentConfig):
+class StateComponentConfig(BaseComponentConfig, ChoiceRegistry):
     pass
 
 

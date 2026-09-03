@@ -16,11 +16,10 @@ from abc import abstractmethod, ABC
 from typing import Generic, TypeVar
 from rclpy.node import Node
 from dataclasses import dataclass
-from draccus.choice_types import ChoiceRegistry
 
 
 @dataclass
-class BaseComponentConfig(ChoiceRegistry):
+class BaseComponentConfig:
     topic: str
 
 

@@ -22,8 +22,8 @@ from leros2.components.common.base import BaseComponentConfig
 from leros2.components.joint_state import JointConfig
 
 
+@ActionComponentConfig.register_subclass('float_array_action')
 @dataclass(kw_only=True)
-@BaseComponentConfig.register_subclass('float_array_action')
 class FloatArrayActionComponentConfig(ActionComponentConfig):
     # Per-element configuration, ordered to match the published array.
     # Each element supports normalization like a joint (see ``JointConfig``),

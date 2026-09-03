@@ -21,8 +21,8 @@ from leros2.components.common.base import BaseComponentConfig
 from leros2.components.common.rotation import RotationRepresentation
 
 
+@ActionComponentConfig.register_subclass("pose_action")
 @dataclass
-@BaseComponentConfig.register_subclass("pose_action")
 class PoseActionComponentConfig(ActionComponentConfig):
     # name to identify the pose component
     name: str

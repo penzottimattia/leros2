@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from leros2.components.common import StateComponentConfig
 from leros2.components.common import ImageBaseComponent, ImageBaseComponentConfig
 from leros2.components.common.base import BaseComponentConfig
 from sensor_msgs.msg import Image
@@ -20,8 +21,8 @@ import numpy as np
 from dataclasses import dataclass
 
 
+@StateComponentConfig.register_subclass('image')
 @dataclass
-@BaseComponentConfig.register_subclass('image')
 class ImageComponentConfig(ImageBaseComponentConfig):
     pass
 

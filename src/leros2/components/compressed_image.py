@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from leros2.components.common import StateComponentConfig
 from dataclasses import dataclass
 from typing import Any
 from leros2.components.common.base_image import ImageBaseComponent
@@ -21,8 +22,8 @@ from leros2.components.common.base import BaseComponentConfig
 from sensor_msgs.msg import CompressedImage
 
 
+@StateComponentConfig.register_subclass('compressed_image')
 @dataclass
-@BaseComponentConfig.register_subclass('compressed_image')
 class CompressedImageComponentConfig(ImageComponentConfig):
     pass
 

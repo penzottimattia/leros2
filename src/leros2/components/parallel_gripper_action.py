@@ -21,8 +21,8 @@ from leros2.components.common import ActionComponentConfig, ActionClientComponen
 from leros2.components.common.base import BaseComponentConfig
 
 
+@ActionComponentConfig.register_subclass('parallel_gripper_action')
 @dataclass
-@BaseComponentConfig.register_subclass('parallel_gripper_action')
 class ParallelGripperActionComponentConfig(ActionComponentConfig):
     joints: list[JointConfig]
 
