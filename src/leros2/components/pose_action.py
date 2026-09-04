@@ -33,6 +33,10 @@ class PoseActionComponentConfig(ActionComponentConfig):
     # representation of the orientation features (see ``RotationRepresentation``)
     rotation: RotationRepresentation = RotationRepresentation.QUATERNION
 
+    # LeRobot 0.6.1 rollout only routes scalar features whose names end in
+    # ``.pos``. Enable the same compatibility naming used by pose_state.
+    lerobot_rollout_compat: bool = False
+
 
 class PoseActionComponent(ActionTopicComponent[PoseActionComponentConfig, PoseStamped]):
     """Adapter for converting action features to a ROS 2 ``PoseStamped``.
@@ -50,15 +54,22 @@ class PoseActionComponent(ActionTopicComponent[PoseActionComponentConfig, PoseSt
     @property
     def features(self) -> dict[str, type | tuple[type, ...]]:
         name = self._config.name
-        return {
+        features = {
             f"{name}.pos.x": float,
             f"{name}.pos.y": float,
             f"{name}.pos.z": float,
             **self._rotation.features(name),
         }
+        if not self._config.lerobot_rollout_compat:
+            return features
+        return {f"{key}.pos": value for key, value in features.items()}
 
     def to_message(self, action: dict[str, Any]) -> PoseStamped:
         name = self._config.name
+        if self._config.lerobot_rollout_compat:
+            action = {
+                key.removesuffix(".pos"): value for key, value in action.items()
+            }
 
         msg = PoseStamped()
 

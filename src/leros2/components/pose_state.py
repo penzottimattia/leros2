@@ -30,6 +30,11 @@ class PoseStateComponentConfig(StateComponentConfig):
     # representation of the orientation features (see ``RotationRepresentation``)
     rotation: RotationRepresentation = RotationRepresentation.QUATERNION
 
+    # LeRobot 0.6.1 rollout only routes scalar features whose names end in
+    # ``.pos``. When enabled, expose Cartesian pose scalars with a trailing
+    # ``.pos`` while preserving their order and values.
+    lerobot_rollout_compat: bool = False
+
 
 class PoseStateComponent(StateComponent[PoseStateComponentConfig, PoseStamped]):
     """Adapter for converting a ROS 2 ``PoseStamped`` to a feature value dictionary.
@@ -46,28 +51,30 @@ class PoseStateComponent(StateComponent[PoseStateComponentConfig, PoseStamped]):
     @property
     def features(self) -> dict[str, type | tuple[type, ...]]:
         name = self._config.name
-        return {
+        features = {
             f"{name}.pos.x": float,
             f"{name}.pos.y": float,
             f"{name}.pos.z": float,
             **self._rotation.features(name),
         }
+        return self._to_rollout_keys(features)
 
     def default_value(self) -> dict[str, Any]:
         # The identity quaternion, not zeros: a zero rotation is not a valid one
         # and its rot6d columns cannot be orthonormalized on the way back out.
         name = self._config.name
-        return {
+        value = {
             f"{name}.pos.x": 0.0,
             f"{name}.pos.y": 0.0,
             f"{name}.pos.z": 0.0,
             **self._rotation.encode(name, (0.0, 0.0, 0.0, 1.0)),
         }
+        return self._to_rollout_keys(value)
 
     def to_value(self, msg: PoseStamped) -> dict[str, Any]:
         name = self._config.name
         orientation = msg.pose.orientation
-        return {
+        value = {
             f"{name}.pos.x": msg.pose.position.x,
             f"{name}.pos.y": msg.pose.position.y,
             f"{name}.pos.z": msg.pose.position.z,
@@ -75,3 +82,10 @@ class PoseStateComponent(StateComponent[PoseStateComponentConfig, PoseStamped]):
                 name, (orientation.x, orientation.y, orientation.z, orientation.w)
             ),
         }
+        return self._to_rollout_keys(value)
+
+    def _to_rollout_keys(self, value: dict[str, Any]) -> dict[str, Any]:
+        """Adapt Cartesian keys to LeRobot 0.6.1's rollout scalar filter."""
+        if not self._config.lerobot_rollout_compat:
+            return value
+        return {f"{key}.pos": item for key, item in value.items()}
